@@ -107,14 +107,15 @@ class ClickableButtonTest_JUnit5Hamcrest {
 
     @Test
     void should_contain_button_with_text() {
-        FxAssert.verifyThat(Controller.newGameButton, LabeledMatchers.hasText("New Game"));
-        FxAssert.verifyThat(Controller.exitButton, LabeledMatchers.hasText("Exit"));
-        FxAssert.verifyThat(Controller.closeGameButton, LabeledMatchers.hasText("Exit"));
-        FxAssert.verifyThat(Controller.startButton, LabeledMatchers.hasText("Start"));
-        FxAssert.verifyThat(Controller.buttonYesNew, LabeledMatchers.hasText("Yes"));
-        FxAssert.verifyThat(Controller.buttonYesClose, LabeledMatchers.hasText("Yes"));
-        FxAssert.verifyThat(Controller.buttonNoNew, LabeledMatchers.hasText("No"));
-        FxAssert.verifyThat(Controller.buttonNoClose, LabeledMatchers.hasText("No"));
+        Controller controller = new Controller();
+        FxAssert.verifyThat(controller.newGameButton, LabeledMatchers.hasText("New Game"));
+        FxAssert.verifyThat(controller.exitButton, LabeledMatchers.hasText("Exit"));
+        FxAssert.verifyThat(controller.closeGameButton, LabeledMatchers.hasText("Exit"));
+        FxAssert.verifyThat(controller.startButton, LabeledMatchers.hasText("Start"));
+        FxAssert.verifyThat(controller.buttonYesNew, LabeledMatchers.hasText("Yes"));
+        FxAssert.verifyThat(controller.buttonYesClose, LabeledMatchers.hasText("Yes"));
+        FxAssert.verifyThat(controller.buttonNoNew, LabeledMatchers.hasText("No"));
+        FxAssert.verifyThat(controller.buttonNoClose, LabeledMatchers.hasText("No"));
     }
 }
 

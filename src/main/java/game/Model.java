@@ -12,8 +12,8 @@ import java.util.Set;
  */
 
 public class Model {
-    public static final int EIGHT = 8;
-    private final int[][] board = new int[EIGHT][EIGHT];
+    public static final int SIZE_OF_BOARD = 8;
+    private final int[][] board = new int[SIZE_OF_BOARD][SIZE_OF_BOARD];
 
     private boolean moveFlag;
 
@@ -39,8 +39,8 @@ public class Model {
 
     // Начало игры
     public Model() {
-        for (int i = 0; i < EIGHT; i++)
-            for (int j = 0; j < EIGHT; j++) {
+        for (int i = 0; i < SIZE_OF_BOARD; i++)
+            for (int j = 0; j < SIZE_OF_BOARD; j++) {
                 board[i][j] = 0;
             }
 
@@ -282,8 +282,8 @@ public class Model {
         availablePositions.clear(); // Set
         int previousPlayer = moveFlag ? 2 : 1;
 
-        for (int i = 0; i < EIGHT; i++)
-            for (int j = 0; j < EIGHT; j++)
+        for (int i = 0; i < SIZE_OF_BOARD; i++)
+            for (int j = 0; j < SIZE_OF_BOARD; j++)
                 if (board[i][j] == previousPlayer) {
                     if (i < 7) {
                         if (board[i + 1][j] == 0)

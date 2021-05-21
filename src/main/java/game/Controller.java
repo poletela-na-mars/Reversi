@@ -26,12 +26,12 @@ import javafx.util.Pair;
 import javafx.scene.layout.*;
 
 public class Controller {
-    public static final int EIGHT = 8;
+    public static final int SIZE_OF_BOARD = 8;
     Model logicModel = new Model();
     Stage newWindow;
     Stage newWindowStartNew;
 
-    final Canvas[][] cells = new Canvas[EIGHT][EIGHT];   // Холст для таблицы-поля
+    final Canvas[][] cells = new Canvas[SIZE_OF_BOARD][SIZE_OF_BOARD];   // Холст для таблицы-поля
 
     Text labelClose = new Text("Do you really want to exit?");
     Text labelNewGame = new Text("Do you want to start a new game?");
@@ -49,21 +49,21 @@ public class Controller {
 
     final GridPane field = new GridPane(); // Таблица-поле
 
-    static final Button newGameButton = new Button("New Game");
+    final Button newGameButton = new Button("New Game");
 
-    static final Button startButton = new Button("Start");
-    static final Button exitButton = new Button("Exit");
+    final Button startButton = new Button("Start");
+    final Button exitButton = new Button("Exit");
 
-    static final Button buttonYesNew = new Button("Yes");
-    static final Button buttonNoNew =  new Button("No");
+    final Button buttonYesNew = new Button("Yes");
+    final Button buttonNoNew =  new Button("No");
 
-    static final Button closeGameButton = new Button("Exit");
-    static final Button buttonYesClose = new Button("Yes");
-    static final Button buttonNoClose = new Button("No");
+    final Button closeGameButton = new Button("Exit");
+    final Button buttonYesClose = new Button("Yes");
+    final Button buttonNoClose = new Button("No");
 
     public Controller(){
-        for (int i = 0; i < EIGHT; i++)
-            for (int j = 0; j < EIGHT; j++) {
+        for (int i = 0; i < SIZE_OF_BOARD; i++)
+            for (int j = 0; j < SIZE_OF_BOARD; j++) {
                 cells[i][j] = new Canvas(60, 60);    // Ширина и высота ячейки
                 field.add(cells[i][j], j, i);
             }
@@ -71,8 +71,8 @@ public class Controller {
 
     public void newGameStart() {
         logicModel = new Model();
-        for (int i = 0; i < EIGHT; i++)
-            for (int j = 0; j < EIGHT; j++) {
+        for (int i = 0; i < SIZE_OF_BOARD; i++)
+            for (int j = 0; j < SIZE_OF_BOARD; j++) {
                 paintCellStyle(i, j, logicModel.getPlayerFromBoard(i, j));  // Получаем циферку, чья фишка
             }
 
@@ -114,7 +114,7 @@ public class Controller {
                         }
                     }
 
-                    if (currentFlag) {
+                    if (!currentFlag) return;
 
                         for (Pair<Integer, Integer> p: logicModel.getAvailablePositions()) {
                             paintCellStyle(p.getKey(), p.getValue(), 0);    // Чистка предыдущей
@@ -133,7 +133,6 @@ public class Controller {
                             finishGame();
                         else
                             moveAnotherPlayer();
-                    }
                 }
             });
         }
