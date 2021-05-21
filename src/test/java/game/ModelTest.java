@@ -8,6 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.api.FxAssert;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.matcher.control.LabeledMatchers;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ModelTest {
@@ -95,3 +100,22 @@ class ModelTest {
         assertEquals(3, logicModel.getWhiteScore());
     }
 }
+
+
+@ExtendWith(ApplicationExtension.class)
+class ClickableButtonTest_JUnit5Hamcrest {
+
+    @Test
+    void should_contain_button_with_text() {
+        FxAssert.verifyThat(Controller.newGameButton, LabeledMatchers.hasText("New Game"));
+        FxAssert.verifyThat(Controller.exitButton, LabeledMatchers.hasText("Exit"));
+        FxAssert.verifyThat(Controller.closeGameButton, LabeledMatchers.hasText("Exit"));
+        FxAssert.verifyThat(Controller.startButton, LabeledMatchers.hasText("Start"));
+        FxAssert.verifyThat(Controller.buttonYesNew, LabeledMatchers.hasText("Yes"));
+        FxAssert.verifyThat(Controller.buttonYesClose, LabeledMatchers.hasText("Yes"));
+        FxAssert.verifyThat(Controller.buttonNoNew, LabeledMatchers.hasText("No"));
+        FxAssert.verifyThat(Controller.buttonNoClose, LabeledMatchers.hasText("No"));
+    }
+}
+
+

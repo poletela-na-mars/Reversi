@@ -12,7 +12,8 @@ import java.util.Set;
  */
 
 public class Model {
-    private final int[][] board = new int[8][8];
+    public static final int EIGHT = 8;
+    private final int[][] board = new int[EIGHT][EIGHT];
 
     private boolean moveFlag;
 
@@ -27,17 +28,27 @@ public class Model {
     private int blackScore;
     private int whiteScore;
 
+    enum Color{
+        WHITE(2), BLACK(1);
+        private final int numb;
+        Color(int numb){
+            this.numb = numb;
+        }
+        public int getColor(){ return numb;}
+    }
+
     // Начало игры
     public Model() {
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < EIGHT; i++)
+            for (int j = 0; j < EIGHT; j++) {
                 board[i][j] = 0;
             }
 
-        board[3][3] = 2;    // White
-        board[4][4] = 2;
-        board[3][4] = 1;    // Black
-        board[4][3] = 1;
+
+        board[3][3] = Color.WHITE.getColor();
+        board[4][4] = Color.WHITE.getColor();
+        board[3][4] = Color.BLACK.getColor();
+        board[4][3] = Color.BLACK.getColor();
 
         moveFlag = true;
 
@@ -55,7 +66,7 @@ public class Model {
     public boolean findLineForMove(int i, int j, boolean move) {
         paintCell.clear();
 
-        if (move) paintCell.add(new Pair<>(i, j));
+        //if (move) paintCell.add(new Pair<>(i, j));
 
         int currentPlayer = moveFlag ? 1 : 2;
 
@@ -72,11 +83,10 @@ public class Model {
                         // Наименьший вариант, сколько закрасить (2 = фишка врага + новая наша)
                         if (!move) return true;
 
-                        for (int m = j; m < newJ; m++)
+                        for (int m = j; m < newJ; m++) {
                             board[i][m] = currentPlayer;
-
-                        for (int m = j + 1; m < newJ; m++)
                             paintCell.add(new Pair<>(i, m));
+                        }
                     }
 
                     break;
@@ -96,11 +106,10 @@ public class Model {
                     if (count != 1) {
                         if (!move) return true;
 
-                        for (int m = j; m > newJ; m--)
+                        for (int m = j; m > newJ; m--) {
                             board[i][m] = currentPlayer;
-
-                        for (int m = j - 1; m > newJ; m--)
                             paintCell.add(new Pair<>(i, m));
+                        }
                     }
 
                     break;
@@ -120,11 +129,10 @@ public class Model {
                     if (count != 1) {
                         if (!move) return true;
 
-                        for (int m = i; m < newI; m++)
+                        for (int m = i; m < newI; m++) {
                             board[m][j] = currentPlayer;
-
-                        for (int m = i + 1; m < newI; m++)
                             paintCell.add(new Pair<>(m, j));
+                        }
                     }
 
                     break;
@@ -144,11 +152,10 @@ public class Model {
                     if (count != 1) {
                         if (!move) return true;
 
-                        for (int m = i; m > newI; m--)
+                        for (int m = i; m > newI; m--) {
                             board[m][j] = currentPlayer;
-
-                        for (int m = i - 1; m > newI; m--)
                             paintCell.add(new Pair<>(m, j));
+                        }
                     }
 
                     break;
@@ -172,9 +179,6 @@ public class Model {
 
                         for (int k = i, m = j; k < newI && m < newJ; k++, m++) {
                             board[k][m] = currentPlayer;
-                        }
-
-                        for (int k = i + 1, m = j + 1; k < newI && m < newJ; k++, m++) {
                             paintCell.add(new Pair<>(k, m));
                         }
                     }
@@ -200,9 +204,6 @@ public class Model {
 
                         for (int k = i, m = j; k < newI && m > newJ; k++, m--) {
                             board[k][m] = currentPlayer;
-                        }
-
-                        for (int k = i + 1, m = j - 1; k < newI && m > newJ; k++, m--) {
                             paintCell.add(new Pair<>(k, m));
                         }
                     }
@@ -228,9 +229,6 @@ public class Model {
 
                         for (int k = i, m = j; k > newI && m > newJ; k--, m--) {
                             board[k][m] = currentPlayer;
-                        }
-
-                        for (int k = i - 1, m = j - 1; k > newI && m > newJ; k--, m--) {
                             paintCell.add(new Pair<>(k, m));
                         }
                     }
@@ -254,12 +252,8 @@ public class Model {
                     if (count != 1) {
                         if (!move) return true;
 
-
                         for (int k = i, m = j; k > newI && m < newJ; k--, m++) {
                             board[k][m] = currentPlayer;
-                        }
-
-                        for (int k = i - 1, m = j + 1; k > newI && m < newJ; k--, m++) {
                             paintCell.add(new Pair<>(k, m));
                         }
                     }
@@ -288,8 +282,8 @@ public class Model {
         availablePositions.clear(); // Set
         int previousPlayer = moveFlag ? 2 : 1;
 
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
+        for (int i = 0; i < EIGHT; i++)
+            for (int j = 0; j < EIGHT; j++)
                 if (board[i][j] == previousPlayer) {
                     if (i < 7) {
                         if (board[i + 1][j] == 0)

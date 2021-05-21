@@ -26,9 +26,15 @@ import javafx.util.Pair;
 import javafx.scene.layout.*;
 
 public class Controller {
+    public static final int EIGHT = 8;
     Model logicModel = new Model();
+    Stage newWindow;
+    Stage newWindowStartNew;
 
-    final Canvas[][] cells = new Canvas[8][8];   // Холст для таблицы-поля
+    final Canvas[][] cells = new Canvas[EIGHT][EIGHT];   // Холст для таблицы-поля
+
+    Text labelClose = new Text("Do you really want to exit?");
+    Text labelNewGame = new Text("Do you want to start a new game?");
 
     final Text blackText = new Text(600, 200, "BLACK: ");
     final Text whiteText = new Text(600, 400, "WHITE: ");
@@ -43,21 +49,21 @@ public class Controller {
 
     final GridPane field = new GridPane(); // Таблица-поле
 
-    final Button newGameButton = new Button("New Game");
+    static final Button newGameButton = new Button("New Game");
 
-    final Button startButton = new Button("Start");
-    final Button exitButton = new Button("Exit");
+    static final Button startButton = new Button("Start");
+    static final Button exitButton = new Button("Exit");
 
-    final Button buttonYesNew = new Button("Yes");
-    final Button buttonNoNew =  new Button("No");
+    static final Button buttonYesNew = new Button("Yes");
+    static final Button buttonNoNew =  new Button("No");
 
-    final Button closeGameButton = new Button("Exit");
-    final Button buttonYesClose = new Button("Yes");
-    final Button buttonNoClose = new Button("No");
+    static final Button closeGameButton = new Button("Exit");
+    static final Button buttonYesClose = new Button("Yes");
+    static final Button buttonNoClose = new Button("No");
 
     public Controller(){
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < EIGHT; i++)
+            for (int j = 0; j < EIGHT; j++) {
                 cells[i][j] = new Canvas(60, 60);    // Ширина и высота ячейки
                 field.add(cells[i][j], j, i);
             }
@@ -65,8 +71,8 @@ public class Controller {
 
     public void newGameStart() {
         logicModel = new Model();
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < EIGHT; i++)
+            for (int j = 0; j < EIGHT; j++) {
                 paintCellStyle(i, j, logicModel.getPlayerFromBoard(i, j));  // Получаем циферку, чья фишка
             }
 
@@ -89,46 +95,44 @@ public class Controller {
         whoWinText.setVisible(false);
     }
 
-
     public void nextMove() {
         for (Node grid : field.getChildren()) {
             grid.setOnMouseReleased(new EventHandler<>() {    // Отпускание кнопки
                 @Override
                 public void handle(MouseEvent event) {
-                    if (event.getClickCount() == 1) {
-                        Node source = (Node) event.getSource(); // Возвращаем источник события
+                    if (event.getClickCount() != 1) return;
+                    Node source = (Node) event.getSource(); // Возвращаем источник события
 
-                        int i = GridPane.getRowIndex(source);
-                        int j = GridPane.getColumnIndex(source);
+                    int i = GridPane.getRowIndex(source);
+                    int j = GridPane.getColumnIndex(source);
 
-                        boolean currentFlag = false;
+                    boolean currentFlag = false;
+                    for (Pair<Integer, Integer> p: logicModel.getAvailablePositions()) {
+                        if (p.getValue() == j && p.getKey() == i) {     // Можно ставить, если попадают в "разрешенные" фишки
+                            currentFlag = true;
+                            break;
+                        }
+                    }
+
+                    if (currentFlag) {
+
                         for (Pair<Integer, Integer> p: logicModel.getAvailablePositions()) {
-                            if (p.getValue() == j && p.getKey() == i) {     // Можно ставить, если попадают в "разрешенные" фишки
-                                currentFlag = true;
-                                break;
-                            }
+                            paintCellStyle(p.getKey(), p.getValue(), 0);    // Чистка предыдущей
                         }
 
-                        if (currentFlag) {
+                        logicModel.findLineForMove(i, j, true); // Обновления на доске + к числу, которые красить
 
-                            for (Pair<Integer, Integer> p: logicModel.getAvailablePositions()) {
-                                paintCellStyle(p.getKey(), p.getValue(), 0);    // Чистка предыдущей
-                            }
-
-                            logicModel.findLineForMove(i, j, true); // Обновления на доске + к числу, которые красить
-
-                            for (Pair<Integer, Integer> p: logicModel.getPaintCell()) {
-                                paintCellStyle(p.getKey(), p.getValue(),
-                                        logicModel.getPlayerFromBoard(p.getKey(), p.getValue()));
-                            }
-
-                            logicModel.findAvailablePositions();    // Обновляем placeablePositions
-
-                            if (logicModel.getAvailablePositions().isEmpty())   // Set
-                                finishGame();
-                            else
-                                moveAnotherPlayer();
+                        for (Pair<Integer, Integer> p: logicModel.getPaintCell()) {
+                            paintCellStyle(p.getKey(), p.getValue(),
+                                    logicModel.getPlayerFromBoard(p.getKey(), p.getValue()));
                         }
+
+                        logicModel.findAvailablePositions();    // Обновляем placeablePositions
+
+                        if (logicModel.getAvailablePositions().isEmpty())   // Set
+                            finishGame();
+                        else
+                            moveAnotherPlayer();
                     }
                 }
             });
@@ -222,62 +226,30 @@ public class Controller {
         }
     }
 
-    Stage newWindow = new Stage();
-    public void closeButtonAction() {
+    public void handleCloseAndNewGameButton(Text label, Button no, Button yes, Stage stage) {
+        stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        label = new Text(label.getText());
+        label.setFill(Color.DARKSLATEGRAY);
+        label.setFont(Font.font("Franklin Gothic Medium",20));
 
-        Stage newWindow = new Stage();
-        newWindow.initStyle(StageStyle.UNDECORATED);
-
-        Text secondLabel = new Text("Do you really want to exit?");
-        secondLabel.setFill(Color.DARKSLATEGRAY);
-        secondLabel.setFont(Font.font("Franklin Gothic Medium",20));
-
-        StackPane.setAlignment(secondLabel, Pos.TOP_CENTER);
+        StackPane.setAlignment(label, Pos.TOP_CENTER);
 
         HBox rootOne = new HBox(
                 20,
-                buttonNoClose, buttonYesClose
+                no, yes
         );
 
         rootOne.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(
-                rootOne, secondLabel
+                rootOne, label
         );
         Scene secondScene = new Scene(root, 330, 100);
 
-        newWindow.setScene(secondScene);
+        stage.setScene(secondScene);
 
-        newWindow.show();
-    }
-
-    Stage newWindowStartNew = new Stage();
-    public void handleNewGameStart() {
-
-        Stage newWindowStartNew = new Stage();  // Чтобы при повторном нажатии, окно появлялось, соответственно, еще раз
-        newWindowStartNew.initStyle(StageStyle.UNDECORATED);
-
-        Text secondLabel = new Text("Do you want to start a new game?");
-        secondLabel.setFill(Color.DARKSLATEGRAY);
-        secondLabel.setFont(Font.font("Franklin Gothic Medium",20));
-
-        StackPane.setAlignment(secondLabel, Pos.TOP_CENTER);
-
-        HBox rootOne = new HBox(
-                20,
-                buttonNoNew, buttonYesNew
-        );
-
-        rootOne.setAlignment(Pos.CENTER);
-
-        StackPane root = new StackPane(
-                rootOne, secondLabel
-        );
-        Scene secondScene = new Scene(root, 330, 100);
-
-        newWindowStartNew.setScene(secondScene);
-
-        newWindowStartNew.show();
+        stage.show();
     }
 
     public void handleButtonYesNew() {

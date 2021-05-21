@@ -13,8 +13,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
-
 /**
  * @author poletela-na-mars (Polina Postylyakova)
  */
@@ -42,7 +40,7 @@ public class View extends Application {
         controller.field.setLayoutX(80);
         controller.field.setLayoutY(65);
         controller.field.setGridLinesVisible(true);
-        controller.field.setOnMousePressed((e) -> controller.nextMove());
+        controller.nextMove();
 
         controller.blackText.setFont(Font.font("Franklin Gothic Medium", 20));
         controller.blackText.setFill(Color.DARKSLATEGRAY);
@@ -59,57 +57,59 @@ public class View extends Application {
         controller.whoMoveWh.setFont(Font.font("Franklin Gothic Medium",20));
         controller.whoMoveWh.setFill(Color.WHITE);
 
-        controller.newGameButton.setLayoutX(615);
-        controller.newGameButton.setLayoutY(250);
-        controller.newGameButton.setOnMouseClicked((e) -> {
+        Controller.newGameButton.setLayoutX(615);
+        Controller.newGameButton.setLayoutY(250);
+        Controller.newGameButton.setOnMouseClicked((e) -> {
             stage.setOpacity(0.5);
-            controller.handleNewGameStart();
-            controller.buttonNoNew.setOnMouseClicked((event) -> {
+            controller.handleCloseAndNewGameButton(controller.labelNewGame, Controller.buttonNoNew,
+                    Controller.buttonYesNew, controller.newWindowStartNew);
+            Controller.buttonNoNew.setOnMouseClicked((event) -> {
                 stage.setOpacity(1);
                 controller.handleButtonNoNew();
             });
-            controller.buttonYesNew.setOnMouseClicked((event) -> {
+            Controller.buttonYesNew.setOnMouseClicked((event) -> {
                 stage.setOpacity(1);
                 controller.handleButtonYesNew();
             });
         });
-        controller.newGameButton.setFont(Font.font("Franklin Gothic Medium",20));
-        controller.newGameButton.setStyle("-fx-background-color: cadetblue; ");
-        controller.newGameButton.setTextFill(Color.WHITE);
+        Controller.newGameButton.setFont(Font.font("Franklin Gothic Medium",20));
+        Controller.newGameButton.setStyle("-fx-background-color: cadetblue; ");
+        Controller.newGameButton.setTextFill(Color.WHITE);
 
-        controller.buttonYesNew.setStyle("-fx-background-color: cadetblue; ");
-        controller.buttonYesNew.setTextFill(Color.WHITE);
-        controller.buttonYesNew.setFont(Font.font("Franklin Gothic Medium",18));
+        Controller.buttonYesNew.setStyle("-fx-background-color: cadetblue; ");
+        Controller.buttonYesNew.setTextFill(Color.WHITE);
+        Controller.buttonYesNew.setFont(Font.font("Franklin Gothic Medium",18));
 
-        controller.buttonNoNew.setStyle("-fx-background-color: cadetblue; ");
-        controller.buttonNoNew.setTextFill(Color.WHITE);
-        controller.buttonNoNew.setFont(Font.font("Franklin Gothic Medium",18));
+        Controller.buttonNoNew.setStyle("-fx-background-color: cadetblue; ");
+        Controller.buttonNoNew.setTextFill(Color.WHITE);
+        Controller.buttonNoNew.setFont(Font.font("Franklin Gothic Medium",18));
 
-        controller.closeGameButton.setLayoutX(615);
-        controller.closeGameButton.setLayoutY(300);
-        controller.closeGameButton.setOnMouseClicked((e) -> {
+        Controller.closeGameButton.setLayoutX(615);
+        Controller.closeGameButton.setLayoutY(300);
+        Controller.closeGameButton.setOnMouseClicked((e) -> {
             stage.setOpacity(0.5);
-            controller.closeButtonAction();
-            controller.buttonNoClose.setOnMouseClicked((event) -> {
+            controller.handleCloseAndNewGameButton(controller.labelClose, Controller.buttonNoClose,
+                    Controller.buttonYesClose, controller.newWindow);
+            Controller.buttonNoClose.setOnMouseClicked((event) -> {
                 stage.setOpacity(1);
                 controller.handleButtonNoClose();
             });
-            controller.buttonYesClose.setOnMouseClicked((event) -> {
+            Controller.buttonYesClose.setOnMouseClicked((event) -> {
                 stage.setOpacity(1);
                 controller.handleButtonYesClose();
             });
         });
-        controller.closeGameButton.setStyle("-fx-background-color: cadetblue; ");
-        controller.closeGameButton.setTextFill(Color.WHITE);
-        controller.closeGameButton.setFont(Font.font("Franklin Gothic Medium",20));
+        Controller.closeGameButton.setStyle("-fx-background-color: cadetblue; ");
+        Controller.closeGameButton.setTextFill(Color.WHITE);
+        Controller.closeGameButton.setFont(Font.font("Franklin Gothic Medium",20));
 
-        controller.buttonYesClose.setStyle("-fx-background-color: cadetblue; ");
-        controller.buttonYesClose.setTextFill(Color.WHITE);
-        controller.buttonYesClose.setFont(Font.font("Franklin Gothic Medium",18));
+        Controller.buttonYesClose.setStyle("-fx-background-color: cadetblue; ");
+        Controller.buttonYesClose.setTextFill(Color.WHITE);
+        Controller.buttonYesClose.setFont(Font.font("Franklin Gothic Medium",18));
 
-        controller.buttonNoClose.setStyle("-fx-background-color: cadetblue; ");
-        controller.buttonNoClose.setTextFill(Color.WHITE);
-        controller.buttonNoClose.setFont(Font.font("Franklin Gothic Medium",18));
+        Controller.buttonNoClose.setStyle("-fx-background-color: cadetblue; ");
+        Controller.buttonNoClose.setTextFill(Color.WHITE);
+        Controller.buttonNoClose.setFont(Font.font("Franklin Gothic Medium",18));
 
         controller.whoWinRect.setX(240);
         controller.whoWinRect.setY(235);
@@ -124,34 +124,34 @@ public class View extends Application {
 
         Group root = new Group(
                 controller.whiteText,
-                controller.whiteScoreText, controller.newGameButton,
+                controller.whiteScoreText, Controller.newGameButton,
                 controller.blackText, controller.blackScoreText,
                 controller.field, controller.whoMove,
                 controller.whoWinRect, controller.whoWinText,
-                controller.closeGameButton, controller.whoMoveBl,
+                Controller.closeGameButton, controller.whoMoveBl,
                 controller.whoMoveWh
         );
 
-        controller.startButton.setLayoutX(300);
-        controller.startButton.setLayoutY(500);
-        controller.startButton.setOnMouseClicked((e) -> controller.startGame(stage, root, controller));
-        controller.startButton.setStyle("-fx-background-color: darkslategray; ");
-        controller.startButton.setTextFill(Color.WHITE);
-        controller.startButton.setFont(Font.font("Franklin Gothic Medium",25));
+        Controller.startButton.setLayoutX(300);
+        Controller.startButton.setLayoutY(500);
+        Controller.startButton.setOnMouseClicked((e) -> controller.startGame(stage, root, controller));
+        Controller.startButton.setStyle("-fx-background-color: darkslategray; ");
+        Controller.startButton.setTextFill(Color.WHITE);
+        Controller.startButton.setFont(Font.font("Franklin Gothic Medium",25));
 
-        controller.exitButton.setLayoutX(300);
-        controller.exitButton.setLayoutY(500);
-        controller.exitButton.setOnMouseClicked((e) -> controller.handleButtonYesClose());
-        controller.exitButton.setStyle("-fx-background-color: darkslategray; ");
-        controller.exitButton.setTextFill(Color.WHITE);
-        controller.exitButton.setFont(Font.font("Franklin Gothic Medium",25));
+        Controller.exitButton.setLayoutX(300);
+        Controller.exitButton.setLayoutY(500);
+        Controller.exitButton.setOnMouseClicked((e) -> controller.handleButtonYesClose());
+        Controller.exitButton.setStyle("-fx-background-color: darkslategray; ");
+        Controller.exitButton.setTextFill(Color.WHITE);
+        Controller.exitButton.setFont(Font.font("Franklin Gothic Medium",25));
 
         Image image = new Image("menu_Reversi_P.png");
         ImageView imageView = new ImageView(image);
 
         VBox rootTwo = new VBox(
                 20,
-                controller.startButton, controller.exitButton
+                Controller.startButton, Controller.exitButton
         );
 
         rootTwo.setAlignment(Pos.CENTER);
@@ -170,3 +170,5 @@ public class View extends Application {
         launch(args);
     }
 }
+
+
