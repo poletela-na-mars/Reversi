@@ -22,11 +22,14 @@ import javafx.stage.StageStyle;
  */
 
 public class View extends Application {
+    Controller controller;
+
+    boolean initStageStyle = true;
 
     @Override
     public void start(Stage stage) {
 
-        Controller controller = new Controller();
+         controller = new Controller();
 
         stage.setHeight(600);
         stage.setWidth(800);
@@ -119,8 +122,9 @@ public class View extends Application {
         controller.whoWinText.setFont(Font.font("Franklin Gothic Medium", 20));
         controller.whoWinRect.setStroke(Color.DARKCYAN);
         controller.whoWinRect.setStrokeWidth(2.0);
-
-        stage.initStyle(StageStyle.UNDECORATED);
+        if (initStageStyle) {
+            stage.initStyle(StageStyle.UNDECORATED);
+        }
 
         Group root = new Group(
                 controller.whiteText,

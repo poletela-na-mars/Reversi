@@ -55,13 +55,13 @@ public class Controller {
     final Button exitButton = new Button("Exit");
 
     final Button buttonYesNew = new Button("Yes");
-    final Button buttonNoNew =  new Button("No");
+    final Button buttonNoNew = new Button("No");
 
     final Button closeGameButton = new Button("Exit");
     final Button buttonYesClose = new Button("Yes");
     final Button buttonNoClose = new Button("No");
 
-    public Controller(){
+    public Controller() {
         for (int i = 0; i < SIZE_OF_BOARD; i++)
             for (int j = 0; j < SIZE_OF_BOARD; j++) {
                 cells[i][j] = new Canvas(60, 60);    // Ширина и высота ячейки
@@ -107,8 +107,9 @@ public class Controller {
                     int j = GridPane.getColumnIndex(source);
 
                     boolean currentFlag = false;
-                    for (Pair<Integer, Integer> p: logicModel.getAvailablePositions()) {
-                        if (p.getValue() == j && p.getKey() == i) {     // Можно ставить, если попадают в "разрешенные" фишки
+                    for (Pair<Integer, Integer> p : logicModel.getAvailablePositions()) {
+                        if (p.getValue() == j && p.getKey() == i) {
+                            // Можно ставить, если попадают в "разрешенные" фишки
                             currentFlag = true;
                             break;
                         }
@@ -116,23 +117,24 @@ public class Controller {
 
                     if (!currentFlag) return;
 
-                        for (Pair<Integer, Integer> p: logicModel.getAvailablePositions()) {
-                            paintCellStyle(p.getKey(), p.getValue(), 0);    // Чистка предыдущей
-                        }
+                    for (Pair<Integer, Integer> p : logicModel.getAvailablePositions()) {
+                        paintCellStyle(p.getKey(), p.getValue(), 0);    // Чистка предыдущей
+                    }
 
-                        logicModel.findLineForMove(i, j, true); // Обновления на доске + к числу, которые красить
+                    logicModel.findLineForMove(i, j, true);
+                    // Обновления на доске + к числу, которые красить
 
-                        for (Pair<Integer, Integer> p: logicModel.getPaintCell()) {
-                            paintCellStyle(p.getKey(), p.getValue(),
-                                    logicModel.getPlayerFromBoard(p.getKey(), p.getValue()));
-                        }
+                    for (Pair<Integer, Integer> p : logicModel.getPaintCell()) {
+                        paintCellStyle(p.getKey(), p.getValue(),
+                                logicModel.getPlayerFromBoard(p.getKey(), p.getValue()));
+                    }
 
-                        logicModel.findAvailablePositions();    // Обновляем placeablePositions
+                    logicModel.findAvailablePositions();    // Обновляем placeablePositions
 
-                        if (logicModel.getAvailablePositions().isEmpty())   // Set
-                            finishGame();
-                        else
-                            moveAnotherPlayer();
+                    if (logicModel.getAvailablePositions().isEmpty())   // Set
+                        finishGame();
+                    else
+                        moveAnotherPlayer();
                 }
             });
         }
@@ -153,9 +155,9 @@ public class Controller {
             InnerShadow shadow = new InnerShadow();
             cells.setEffect(shadow);
             cells.setFill(Color.DARKSLATEGRAY);
-            cells.fillOval(5, 5, 50,50);
+            cells.fillOval(5, 5, 50, 50);
             cells.setStroke(Color.BLACK);
-            cells.strokeOval(5, 5, 50,50);
+            cells.strokeOval(5, 5, 50, 50);
         }
 
         // Белые фишки
@@ -163,9 +165,9 @@ public class Controller {
             InnerShadow shadow = new InnerShadow();
             cells.setEffect(shadow);
             cells.setFill(Color.WHITE);
-            cells.fillOval(5, 5, 50,50);
+            cells.fillOval(5, 5, 50, 50);
             cells.setStroke(Color.BLACK);
-            cells.strokeOval(5, 5, 50,50);
+            cells.strokeOval(5, 5, 50, 50);
         }
 
         if (style == 3) {
@@ -188,8 +190,7 @@ public class Controller {
             whoMoveBl.setFill(Color.BLACK);
             whoMoveBl.setText("BLACK");
             whoMoveWh.setVisible(false);
-        }
-        else {
+        } else {
             whoMoveWh.setVisible(true);
             whoMoveWh.setFill(Color.WHITE);
             whoMoveWh.setText("WHITE");
@@ -214,12 +215,10 @@ public class Controller {
         if (blackScore > whiteScore) {
             whoWinText.setFill(Color.BLACK);
             whoWinText.setText("Black Wins!");
-        }
-        else if (whiteScore > blackScore) {
+        } else if (whiteScore > blackScore) {
             whoWinText.setFill(Color.WHITE);
             whoWinText.setText("White Wins!");
-        }
-        else {
+        } else {
             whoWinText.setFill(Color.DARKSLATEGRAY);
             whoWinText.setText("Drawn Game!");
         }
@@ -230,7 +229,7 @@ public class Controller {
         stage.initStyle(StageStyle.UNDECORATED);
         label = new Text(label.getText());
         label.setFill(Color.DARKSLATEGRAY);
-        label.setFont(Font.font("Franklin Gothic Medium",20));
+        label.setFont(Font.font("Franklin Gothic Medium", 20));
 
         StackPane.setAlignment(label, Pos.TOP_CENTER);
 
@@ -256,14 +255,16 @@ public class Controller {
         newWindowStartNew = (Stage) buttonYesNew.getScene().getWindow();
         newWindowStartNew.close();
     }
+
     public void handleButtonNoNew() {
         newWindowStartNew = (Stage) buttonNoNew.getScene().getWindow();
         newWindowStartNew.close();
     }
 
-    public void handleButtonYesClose(){
+    public void handleButtonYesClose() {
         System.exit(0);
     }
+
     public void handleButtonNoClose() {
         newWindow = (Stage) buttonNoClose.getScene().getWindow();
         newWindow.close();

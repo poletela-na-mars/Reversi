@@ -1,17 +1,20 @@
 package game;
 
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.api.FxAssert;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.framework.junit5.Start;
+import org.testfx.matcher.control.LabeledMatchers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxAssert;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.matcher.control.LabeledMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -101,13 +104,21 @@ class ModelTest {
     }
 }
 
-
 @ExtendWith(ApplicationExtension.class)
-class ClickableButtonTest_JUnit5Hamcrest {
+class UI_JUnit5Hamcrest extends ApplicationTest {
+    View view;
+
+    @Start
+    @Override
+    public void start(Stage stage) throws Exception {
+        view = new View();
+        view.initStageStyle = false;
+        view.start(stage);
+    }
 
     @Test
     void should_contain_button_with_text() {
-        Controller controller = new Controller();
+        Controller controller = view.controller;
         FxAssert.verifyThat(controller.newGameButton, LabeledMatchers.hasText("New Game"));
         FxAssert.verifyThat(controller.exitButton, LabeledMatchers.hasText("Exit"));
         FxAssert.verifyThat(controller.closeGameButton, LabeledMatchers.hasText("Exit"));
@@ -116,6 +127,14 @@ class ClickableButtonTest_JUnit5Hamcrest {
         FxAssert.verifyThat(controller.buttonYesClose, LabeledMatchers.hasText("Yes"));
         FxAssert.verifyThat(controller.buttonNoNew, LabeledMatchers.hasText("No"));
         FxAssert.verifyThat(controller.buttonNoClose, LabeledMatchers.hasText("No"));
+    }
+
+    @Test
+    void when_button_is_clicked(FxRobot robot) {
+        Controller controller = view.controller;
+        robot.clickOn(controller.startButton);
+
+        FxAssert.verifyThat(controller.newGameButton, LabeledMatchers.hasText("New Game"));
     }
 }
 
